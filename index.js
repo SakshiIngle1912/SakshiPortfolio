@@ -2,6 +2,7 @@ const express = require("express")
 const connectDB = require("./config/db")
 const mongoose = require("mongoose")
 const cors = require("cors")
+const path = require("path")
 // const cookieParser=require("cookie-parser")
 require("dotenv").config({ path: "./.env" })
 connectDB()
@@ -10,12 +11,15 @@ const app = express()
 app.use(express.json())
 app.use(express.static("public"))
 app.use(cors({
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: "https://sakshiportfolio.onrender.com",
     // credentials: true
 }))
 
 app.use("/", require("./routes"))
-
+app.use("*", (req, res) => {
+    res.sendFile(path, join(__dirname, "public/index.html"))
+})
 
 mongoose.connection.once("open", e => {
     console.log("MONGO CONNECTED");
